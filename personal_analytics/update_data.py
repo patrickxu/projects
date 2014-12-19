@@ -6,12 +6,13 @@ import sys
 import ast
 
 today = datetime.date.today()
+fieldnames = ['date', 'run', 'sleep', 'read', 'watch', 'hoop']
 
 def create_file(file_):
 	"""
 		to create initial data file
 	"""
-	fieldnames = ['date', 'run', 'sleep', 'read', 'watch']
+
 	with open(file_, 'w') as csvFile:
 		writer = csv.DictWriter(csvFile, delimiter=',', quotechar='"', fieldnames=fieldnames)
 		writer.writeheader()
@@ -51,13 +52,18 @@ def clean_row(in_):
 		in_['read'] = [in_['read']]
 	if 'watch' in in_.keys() and '[' not in in_['watch']:
 		in_['watch'] = [in_['watch']]
+	if 'sleep' not in in_.keys():
+		in_['sleep'] = 0
+	if 'run' not in in_.keys():
+		in_['run'] = 0
+	if 'hoop' not in in_.keys():
+		in_['hoop'] = 0
 
-def update(file_, update_dict):
+def update(file_, update_):
 	"""
 		update file by adding or updating row
 	"""
 	tempfile = NamedTemporaryFile(delete=False)
-	fieldnames = ['date', 'run', 'sleep', 'read', 'watch']
 	old_entry = False
 	with open(file_, 'rb') as csvFile, tempfile:
 		reader = csv.reader(csvFile, delimiter=',', quotechar='"')
@@ -67,11 +73,11 @@ def update(file_, update_dict):
 			if str(today) == to_write['date']:
 				print "Checks out"
 				old_entry = True
-				update_row(to_write, update_dict)		
+				update_row(to_write, update_)		
 		writer.writerow(to_write)
 		if old_entry == False:
-			clean_row(update_dict, today)		
-			writer.writerow(update_dict)
+			clean_row(update_)		
+			writer.writerow(update_)
 	shutil.move(tempfile.name, file_)
 
 def print_file(file_):
@@ -94,7 +100,7 @@ if __name__ == '__main__':
 		cols = raw_input("Please Enter Columns To Update: ")
 		vals = raw_input("Please Enter Values To Update: ")
 		var = dict(zip(cols.split(','), vals.split(',')))
-		update('p_data.csv', var)
+		update('pers_data.csv', var)
 	elif sys.argv[1] == 'print':
 		print_file('p_data.csv')
 	else:
