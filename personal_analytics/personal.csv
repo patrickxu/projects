@@ -1,0 +1,3 @@
+s_date,f_run,f_sleep,f_hoop,f_readtime,f_watchtime,f_pushups,l_books,l_movies
+2014-12-18,4.25,14,.33,2.5,1.33,100,['START The Plague'],"['FINISH The Armstrong Lie', 'START Life Itself']"
+2014-12-19,3.5,7.5,0,1.0,1.67,100,[],['FINISH Life Itself']
